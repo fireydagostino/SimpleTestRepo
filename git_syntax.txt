@@ -1,0 +1,30 @@
+git config --global user.name "<user name>"
+git config --global user.email <email address>
+
+git config --list - shows current configuration settings
+git help <option> - shows help options with respect to <option>
+
+git add <file name> - sends <file name> to staging area
+git reset HEAD <file name> - removes <file name> from the staging area
+
+git status - shows current staged & un-staged items
+git rm -f <file name> - does a force removal of the file <file name>
+git rm --cached <file name> removes file <file name> from the staging area
+git log - shows a log of previous commit activity
+git log --pretty=format:"%h : %an : %ar : %s" -- displays the git log in the format:
+        <abbr. hash> : <change user name> : <time lapse since change> : <first line of change comments>
+git log --since="<YYYY-MM-DD>"
+git log --author"<user.name>"
+
+git commit -a <file> - commits and adds fill to current repository
+git commit -m "message regarding commit" - commits staged files without opening editor
+git commend --amend - takes back last commit
+git grep "<word>" <tag> - does the same as the bash grep command; searched for "<word>" in <tag>
+
+git config --global http.proxy fastweb.int.bell.ca:8083 - fixes the ssl cert issues via proxy server
+
+git remote add <repo name> <repo url> - add a remote repository to list
+git remote remove <repo name> - removes a remote repository from the list
+git fetch <repo name> <repo branch> - fetch the uncommon commits between remote and local repo branches
+
+to create an ignore list file --> create a file called .gitignore --> github.com/github/gitignore
