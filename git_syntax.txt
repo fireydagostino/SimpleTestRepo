@@ -37,3 +37,4 @@ git fetch <remote name> - grabs data from remote but does not merge any changes
 * * Properties - enable quick edit mode * *
 git pull <remote https://> - pulls all CHANGES from html address
 
+* * Edited syntax text online * *
