@@ -68,3 +68,17 @@ git push <remote repo: ie origin> :<branch> - this deletes the specified branch 
     note: you must include that colon!
 
 git mergetool - initializes git's merge tool applicaiton // test //
+    If not present on the system, git-bash will attempt to solve merging tools through vim.
+    This looks awful, and can be ignored as Pycharm offers a subtle way to assess merge issues.
+
+git revert HEAD - reverts the last commit and provides a registry --> BETTER TO USE THIS
+
+ // Best to avoid using the below git functions:
+    git reset <file name> - resets to last commit of <file name>
+    git reset aCommit - reverts to previous commits and resets staging area
+    git reset --hard - resets staging area and working directory to match most recent commit
+    git clean -n displaces files that would be removed by git clean
+    git clean -f - removes untracked files
+              -df - removes untracked files and directories
+              --hard - undoes all changes
+  //
