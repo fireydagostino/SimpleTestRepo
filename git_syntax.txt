@@ -67,3 +67,4 @@ git branch -D <branch> - deletes unmerged branches (basically a force delete)
 git push <remote repo: ie origin> :<branch> - this deletes the specified branch on github
     note: you must include that colon!
 
+git mergetool - initializes git's merge tool applicaiton
