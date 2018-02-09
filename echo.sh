@@ -44,4 +44,5 @@ fi
 
 if [ "$sync" = true ]; then
     echo "Preparing to sync up repositories..."
+    git pull origin master
 fi
