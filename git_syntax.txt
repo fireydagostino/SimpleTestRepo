@@ -39,3 +39,25 @@ git pull <remote https://> - pulls all CHANGES from html address
 
 * * Edited syntax text online * *
  // Reedited syntax for update purposes on local drive //
+
+git remote rename <old remote name> <new remote name>
+
+git tag - lists current tags
+git tag -a <tag - ie: V0.1> "<comment regarding tag - ie Version 0.1>" - adds a tag to previous commit
+git show <tag> - displays info regarding the given tag
+git tag -a <tag> <beginning of hash> - gives a tag to commit for given hash
+git push <remote name> <tag> - pushes specific file regarding tag
+git push <remote name> --tags - pushes all tags
+
+git config --global alias.<new syntax: ie co> <syntax to be replaced: ie commit> - creates an alias
+    for git to use as a form of syntax replacement
+
+for cloning repositories: go onto respective github url - click fork - copy clone url
+    mkdir <new directory>; cd <new directory>; git clone <copied url>
+
+git branch - lists all currently used branches
+git branch <branch> - creates a new branch with name <branch>
+git checkout -b <new branch name> - creates and swaps to the next branch
+git checkout <branch> - swaps to <branch>
+    // Making this change in [branch] experimental //
+
