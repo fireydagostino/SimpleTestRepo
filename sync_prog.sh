@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git branch -u origin/experimental
+
 git remote update
 
 local_repo=$(git rev-parse @)
