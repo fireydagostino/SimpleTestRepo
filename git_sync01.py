@@ -22,8 +22,6 @@ def run_sync(): #Future: add argument to accept repo to sync with
     subprocess.check_call("bash", "-c", "./sync_prog.sh")
 
 
-run_sync()
-
 '''
     Note: add additional code that enables the sync check to be run as a
     method, where the input is the remote url to sync up with. Therefore,
@@ -35,3 +33,5 @@ run_sync()
     inside other programs.
 '''
 
+if __name__ == '__main__':
+    run_sync()
