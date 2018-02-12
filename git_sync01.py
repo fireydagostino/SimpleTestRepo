@@ -11,7 +11,7 @@ import subprocess
     repository being set as the upstream for ease when using
     the git rev-parse command.
     If this is not the case, perform an initial set with the
-    following command: git branch --set-upstream-to=origin/<branch> master
+    following command: git branch --set-upstream-to=<branch alias>/<branch> master
 '''
 
 cmd = "./sync_prog.sh"
@@ -27,3 +27,4 @@ sync_check = subprocess.check_call(["bash", "-c", cmd])
     Note: Add if-main statement to enable this to be run as a method
     inside other programs.
 '''
+
