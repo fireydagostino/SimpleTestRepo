@@ -22,3 +22,8 @@ sync_check = subprocess.check_call(["bash", "-c", cmd])
     method, where the input is the remote url to sync up with. Therefore,
     this will be able to auto-sync with any desired remote repository.
 '''
+
+'''
+    Note: Add if-main statement to enable this to be run as a method
+    inside other programs.
+'''
