@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git branch -u origin/experimental
+
 
 git remote update
 
