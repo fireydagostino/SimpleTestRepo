@@ -14,8 +14,15 @@ import subprocess
     following command: git branch --set-upstream-to=<branch alias>/<branch> master
 '''
 
-cmd = "./sync_prog.sh"
-sync_check = subprocess.check_call(["bash", "-c", cmd])
+#cmd = "./sync_prog.sh"
+#sync_check = subprocess.check_call(["bash", "-c", cmd])
+
+
+def run_sync(): #Future: add argument to accept repo to sync with
+    subprocess.check_call("bash", "-c", "./sync_prog.sh")
+
+
+run_sync()
 
 '''
     Note: add additional code that enables the sync check to be run as a
