@@ -19,7 +19,7 @@ import subprocess
 
 
 def run_sync(): #Future: add argument to accept repo to sync with
-    subprocess.check_call("bash", "-c", "./sync_prog.sh")
+    subprocess.check_call(["bash", "-c", "./sync_prog.sh"])
 
 
 '''
