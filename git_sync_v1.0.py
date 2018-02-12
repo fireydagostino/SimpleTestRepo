@@ -5,7 +5,8 @@
     Sigma URL: https://github.com/Neo23x0/sigma.git
 """
 
-import subprocess
+#import subprocess
+import os
 
 
 '''
@@ -14,8 +15,10 @@ import subprocess
     sync_prog.sh
 '''
 def run_sync():
-    subprocess.check_call(["bash", "-c", "./sync_prog.sh"])
+    #subprocess.check_call(["bash", "-c", "./sync_prog.sh"])
+    os.system("./sync_prog.sh")
 
 
 if __name__ == '__main__':
     run_sync()
+
