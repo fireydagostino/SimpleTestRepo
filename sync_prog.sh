@@ -2,16 +2,16 @@
 
 touch changes.txt
 
-git branch -u origin/master
+git branch -u sigma/master
 
-git remote update
+git remote update sigma
 
 repo_location=$(pwd)
-target_files=($(git diff --name-only origin/master master | egrep "rules"))
+target_files=($(git diff --name-only sigma/master master | egrep "rules/"))
 
 
 local_repo=$(git rev-parse HEAD)
-remote_repo="$(git rev-parse origin/master)"
+remote_repo="$(git rev-parse sigma/master)"
 
 if [[ "$local_repo" == "$remote_repo" ]]; then
     echo "The two repositories are matched."
@@ -22,7 +22,7 @@ fi
 
 if [ "$sync" = true ]; then
     echo "Preparing to sync up repositories..."
-    git pull origin master
+    git pull sigma master
 fi
 
 for target in "${target_files[@]}"; do
