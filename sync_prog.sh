@@ -1,6 +1,6 @@
 #!/bin/bash
 
-touch changes.txt
+touch temp_changes.txt
 
 git branch -u sigma/master
 
@@ -26,13 +26,17 @@ if [ "$sync" = true ]; then
 fi
 
 for target in "${target_files[@]}"; do
-        git log -p -1 "$repo_location/$target" >> changes.txt
+        git log -p -1 "$repo_location/$target" >> temp_changes.txt
 done
 
 git branch --unset-upstream
 
-if [ -s changes.txt ]; then
-	mail -s "Sigma Rules Update" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/changes.txt
+if [ -s temp_changes.txt ]; then
+	mail -s "Sigma Rules Update" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/temp_changes.txt
+	mail -s "Sigma Rules Update" jonathan.mallette@bell.ca < /opt/sigma/git_sigma/temp_changes.txt
 	echo "Emails sent to listed individuals."
 fi
+
+cat temp_changes.txt >> sigma_changes_archive.txt
+rm temp_changes.txt
 
