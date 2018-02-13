@@ -1,8 +1,18 @@
 #!/bin/bash
 
+touch changes.txt
+
 git branch -u origin/master
 
 git remote update
+
+repo_location=$(pwd)
+target_files=($(git diff --name-only origin/master master | egrep "rules"))
+
+for target in "${target_files[@]}"; do
+	git log -p -1 "$repo_location/$target" >> changes.txt
+done
+
 
 local_repo=$(git rev-parse HEAD)
 remote_repo="$(git rev-parse origin/master)"
@@ -20,3 +30,4 @@ if [ "$sync" = true ]; then
 fi
 
 git branch --unset-upstream
+
