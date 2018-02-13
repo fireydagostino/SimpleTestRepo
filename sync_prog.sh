@@ -4,8 +4,8 @@ git branch -u origin/master
 
 git remote update
 
-local_repo=$(git rev-parse @)
-remote_repo="$(git rev-parse @{u})"
+local_repo=$(git rev-parse HEAD)
+remote_repo="$(git rev-parse origin/master)"
 
 if [[ "$local_repo" == "$remote_repo" ]]; then
     echo "The two repositories are matched."
