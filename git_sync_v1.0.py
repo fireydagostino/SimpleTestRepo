@@ -6,7 +6,6 @@
 """
 
 import subprocess
-#import os
 
 
 '''
@@ -16,7 +15,7 @@ import subprocess
 '''
 def run_sync():
     subprocess.check_call(["bash", "-c", "./sync_prog.sh"])
-    #os.system("sync_prog.sh")
+
 
 
 if __name__ == '__main__':
