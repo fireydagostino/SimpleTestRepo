@@ -13,6 +13,8 @@ import subprocess
     In this case the bash script to run is called
     sync_prog.sh
 '''
+
+
 def run_sync():
     subprocess.check_call(["bash", "-c", "./sync_prog.sh"])
 

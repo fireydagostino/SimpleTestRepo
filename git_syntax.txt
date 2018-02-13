@@ -1,0 +1,108 @@
+Add:
+    git add <file name> - sends <file name> to staging area
+
+Branch:
+    git branch - lists all currently used branches
+    git branch <branch> - creates a new branch with name <branch>
+    git branch -d <branch> - deletes the specified branch
+    git branch -D <branch> - deletes unmerged branches (basically a force delete)
+
+Checkout:
+    git checkout -b <new branch name> - creates and swaps to the next branch
+    git checkout <branch> - swaps to <branch>
+
+Clone:
+    for cloning repositories: go onto respective github url - click fork - copy clone url
+        mkdir <new directory>; cd <new directory>; git clone <copied url>
+
+Commit:
+    git commit -a <file> - commits and adds fill to current repository
+    git commit -m "message regarding commit" - commits staged files without opening editor
+
+Commend:
+    git commend --amend - takes back last commit
+
+Config:
+    git config --global user.name "<user name>"
+    git config --global user.email <email address>
+    git config --list - shows current configuration settings
+    git config --global http.proxy fastweb.int.bell.ca:8083 - fixes the ssl cert issues via proxy server
+    git config --global alias.<new syntax: ie co> <syntax to be replaced: ie commit> - creates an alias
+    for git to use as a form of syntax replacement
+
+Fetch:
+    git fetch <repo name> <repo branch> - fetch the uncommon commits between remote and local repo branches
+    git fetch <remote name> - grabs data from remote but does not merge any changes
+
+Grep:
+    git grep "<word>" <tag> - does the same as the bash grep command; searched for "<word>" in <tag>
+
+
+Help:
+    git help <option> - shows help options with respect to <option>
+
+Log:
+    git log - shows a log of previous commit activity
+    git log --pretty=format:"%h : %an : %ar : %s" -- displays the git log in the format:
+            <abbr. hash> : <change user name> : <time lapse since change> : <first line of change comments>
+    git log --since="<YYYY-MM-DD>"
+    git log --author"<user.name>"
+
+Merge:
+    git merge <branch to be merged with current branch> - merges the listed branch to the current active
+    git mergetool - initializes git's merge tool application
+        If not present on the system, git-bash will attempt to solve merging tools through vim.
+        This looks awful, and can be ignored as Pycharm offers a subtle way to assess merge issues.
+
+Pull:
+    git pull <remote https://> - pulls all CHANGES from html address
+
+
+Push:
+    git push origin master - pushes current master branch to specific remote branch <name = origin>
+        - will ask for username and password for github/gitlab
+    git push <remote name> <tag> - pushes specific file regarding tag
+    git push <remote name> --tags - pushes all tags
+    git push <remote repo: ie origin> :<branch> - this deletes the specified branch on github
+        note: you must include that colon!
+
+Remote:
+    git remote add <repo name> <repo url> - add a remote repository to list
+    git remote add origin <https://github.com/name/repo.git> - adds specified remote repo to list
+    git remote rename <old remote name> <new remote name>
+    git remote remove <repo name> - removes a remote repository from the list
+    git remote -v - displays current remotes and their respective urls
+
+
+Remove:
+    git rm -f <file name> - does a force removal of the file <file name>
+    git rm --cached <file name> removes file <file name> from the staging area
+
+Reset:
+    * * * * Best to avoid using the below git functions * * * *
+    git reset HEAD <file name> - removes <file name> from the staging area
+    git reset <file name> - resets to last commit of <file name>
+    git reset aCommit - reverts to previous commits and resets staging area
+    git reset --hard - resets staging area and working directory to match most recent commit
+    git clean -n displaces files that would be removed by git clean
+    git clean -f - removes untracked files
+              -df - removes untracked files and directories
+              --hard - undoes all changes
+
+Revert:
+    git revert HEAD - reverts the last commit and provides a registry --> BETTER TO USE THIS
+
+Show:
+    git show <tag> - displays info regarding the given tag
+
+Status:
+    git status - shows current staged & un-staged items
+
+Tag:
+    git tag - lists current tags
+    git tag -a <tag - ie: V0.1> "<comment regarding tag - ie Version 0.1>" - adds a tag to previous commit
+    git tag -a <tag> <beginning of hash> - gives a tag to commit for given hash
+
+
+Misc:
+    to create an ignore list file --> create a file called .gitignore --> github.com/github/gitignore
