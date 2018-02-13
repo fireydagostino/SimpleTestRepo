@@ -31,3 +31,8 @@ fi
 
 git branch --unset-upstream
 
+if [ -s changes.txt ]; then
+	mail -s "Sigma Rules Update" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/changes.txt
+	echo "Emails sent to listed individuals."
+fi
+
