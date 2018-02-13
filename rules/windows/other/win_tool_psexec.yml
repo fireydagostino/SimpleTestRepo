@@ -1,0 +1,30 @@
+title: PsExec Tool Execution
+status: experimental
+description: Detects PsExec service installation and execution events (service and Sysmon)
+author: Thomas Patzke
+references:
+    - https://www.jpcert.or.jp/english/pub/sr/ir_research.html
+logsource:
+    product: windows
+detection:
+    service_installation:
+        EventID: 7045
+        ServiceName: 'PSEXESVC'
+        ServiceFileName: '*\PSEXESVC.exe'
+    service_execution:
+        EventID: 7036
+        ServiceName: 'PSEXESVC'
+    sysmon_processcreation:
+        EventID: 1
+        Image: '*\PSEXESVC.exe'
+        User: 'NT AUTHORITY\SYSTEM'
+    condition: service_installation or service_execution or sysmon_processcreation
+fields:
+    - EventID
+    - CommandLine
+    - ParentCommandLine
+    - ServiceName
+    - ServiceFileName
+falsepositives:
+    - unknown
+level: low
