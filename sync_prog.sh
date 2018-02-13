@@ -32,7 +32,7 @@ done
 git branch --unset-upstream
 
 if [ -s temp_changes.txt ]; then
-    #add mail command here
+    #mail -s "<Email Subject Line>" <Email address> < <Email content>
 	echo "Emails sent to listed individuals."
 fi
 
