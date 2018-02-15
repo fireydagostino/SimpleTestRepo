@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /opt/sigma/git_sigma
+
 touch temp_changes.txt
 
 git init

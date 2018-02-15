@@ -1,0 +1,33 @@
+commit cea48d9010e190dc1077e4d253dc1588c1b33ba0
+Author: Dominik Schaudel <dschaudel@users.noreply.github.com>
+Date:   Mon Feb 12 21:57:22 2018 +0100
+
+    Detects successful logon with logon type 9 (NewCredentials) which matches the Overpass the Hash behavior of e.g Mimikatz's sekurlsa::pth module
+
+diff --git a/rules/windows/builtin/win_overpass_the_hash.yml b/rules/windows/builtin/win_overpass_the_hash.yml
+new file mode 100644
+index 0000000..da18454
+--- /dev/null
++++ b/rules/windows/builtin/win_overpass_the_hash.yml
+@@ -0,0 +1,20 @@
++title: Successful Overpass the Hash Attempt
++status: experimental
++description: Detects successful logon with logon type 9 (NewCredentials) which matches the Overpass the Hash behavior of e.g Mimikatz's sekurlsa::pth module.
++references: 
++    - https://cyberwardog.blogspot.de/2017/04/chronicles-of-threat-hunter-hunting-for.html
++author: Roberto Rodriguez (source), Dominik Schaudel (rule)
++date: 2018/02/12
++logsource:
++    product: windows
++    service: security
++detection:
++    selection:
++        EventID: 4624
++        LogonType: 9
++        LogonProcessName: seclogo
++        AuthenticationPackageName: Negotiate
++    condition: selection
++falsepositives:
++    - Runas command-line tool using /netonly parameter
++level: high
+\ No newline at end of file
