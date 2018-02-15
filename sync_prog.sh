@@ -2,6 +2,8 @@
 
 touch temp_changes.txt
 
+git init
+
 git branch -u sigma/master
 
 git remote update sigma
@@ -36,6 +38,8 @@ if [ -s temp_changes.txt ]; then
 	mail -s "Sigma Rules Update" jonathan.mallette@bell.ca < /opt/sigma/git_sigma/temp_changes.txt
 	echo "Emails sent to listed individuals."
 fi
+
+mail -s "Test to confirm script running" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/temp_changes.txt
 
 cat temp_changes.txt >> sigma_changes_archive.txt
 rm temp_changes.txt
