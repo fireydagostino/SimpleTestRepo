@@ -1,0 +1,65 @@
+defaultindex: bell-*
+fieldmappings:
+  # Generic
+  DestinationIp: dst_ip
+  DestinationPort: dst_port
+  SourceIp: src_ip
+  SourcePort: src_port
+  ComputerName: computer_name
+  # Windows
+  AuthenticationPackageName: event_data.AuthenticationPackageName
+  AccessMask: event_data.AccessMask
+  AccountName: event_data.TargetUserName
+  AllowedToDelegateTo: event_data.AllowedToDelegateTo
+  AttributeLDAPDisplayName: event_data.AttributeLDAPDisplayName
+  EventID: event_id
+  CallTrace: event_data.CallTrace
+  #CommandLine: event_data.CommandLine # JM - Need to add a multi mapping for this. wineventlog sends to a different field, current mapping is for sysmon
+  CommandLine: 
+  #  technology="windows-security": event_data.NewProcessName
+  #  technology=windows-sysmon: 
+    service=sysmon: 
+      - event_data.CommandLine
+    service=security: 
+      - lolidk
+    default: test_default_cli
+  CurrentDirectory: event_data.CurrentDirectory
+  DestinationIsIpv6: event_data.DestinationIsIpv6
+  Details: event_data.Details
+  FailureCode: event_data.FailureCode
+  GrantedAccess: event_data.GrantedAccess
+  GroupName: event_data.TargetUserName
+  Image: event_data.Image
+  ImageLoaded: event_data.ImageLoaded
+  LogonProcess: event_data.LogonProcessName
+  LogonType: event_data.LogonType
+  NewProcessName: event_data.NewProcessName
+  ObjectName: event_data.ObjectName
+  ObjectType: event_data.ObjectType
+  ParentImage: event_data.ParentImage
+  ProcessCommandLine: event_data.NewProcessName
+  ProcessName: event_data.ProcessName
+  ServiceFileName: event_data.ServiceFileName
+  ServiceName: event_data.ServiceName
+  Severity: level
+  ShareName: event_data.ShareName
+  Source: source_name
+  SourceImage: event_data.SourceImage
+  SourceIsIpv6: event_data.SourceIsIpv6
+  StartModule: event_data.StartModule
+  SubjectAccountName: event_data.SubjectUserName
+  Status: event_data.Status
+  SubStatus: event_data.SubStatus
+  TargetImage: event_data.TargetImage
+  TargetObject: event_data.TargetObject
+  TargetProcess: event_data.TargetProcess
+  TicketOptions: event_data.TicketOptions
+  TicketEncryption: event_data.TicketEncryption
+  Type: event_data.Type
+  User: event_data.User
+  WorkstationName: event_data.WorkstationName
+  # Proxy
+  cs-uri-query: url
+placeholders:
+  # JM - tested placeholders, does not appear to expand - may not be coded yet
+  Workstations: BMOOSS6044762LT
