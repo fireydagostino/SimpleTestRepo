@@ -53,6 +53,8 @@ Merge:
     git mergetool - initializes git's merge tool application
         If not present on the system, git-bash will attempt to solve merging tools through vim.
         This looks awful, and can be ignored as Pycharm offers a subtle way to assess merge issues.
+    git merge --abort - cancels the current merge *** useful if the merge caused undesired
+        changes in one of the files (ie file deletion).
 
 Pull:
     git pull <remote https://> - pulls all CHANGES from html address
