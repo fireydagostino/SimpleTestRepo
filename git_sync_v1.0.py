@@ -1,4 +1,6 @@
 """
+    Author: Anthony D'Agostino
+
     Python script designed to sync up the current repository
     with the selected remote repository (in this case the
     sigma project by Neo23x0).
@@ -20,3 +22,4 @@ def run_sync():
 
 if __name__ == '__main__':
     run_sync()
+
