@@ -10,16 +10,16 @@
 #   ./sync.sh -- SigmaGitLab -> only pushes server-side updates to SOC-Sigma GitLab
 #   ./sync.sh -- -- -> This will be made invalid
 
-cd /opt/sigma/git_sigma
-
-#Editing required per user case
-#///////////
-touch temp_changes.txt
-#///////////
+#cd /opt/sigma/git_sigma
 
 git init
 
 if [[ "$1" != "--" ]]; then
+#Editing required per user case
+#///////////
+    #touch temp_changes.txt
+#///////////
+
     echo "Input source detected."
     input_alias=$1
 
@@ -33,7 +33,7 @@ if [[ "$1" != "--" ]]; then
 #///////////
 
     echo "Preparing to update with the Input Repository..."
-    git pull "$input_alias" master || git diff "$output_alias"/master master | mail -s "Merge Conflict - Solution Required" <email>; exit
+    git pull "$input_alias" master #|| git diff "$output_alias"/master master | mail -s "Merge Conflict - Solution Required" <email>; exit
 
 #Editing required per user case
 #///////////
@@ -51,8 +51,8 @@ if [[ "$1" != "--" ]]; then
 
 #Editing required per user case
 #///////////
-    cat temp_changes.txt >> sigma_changes_archive.txt
-    rm temp_changes.txt
+#    cat temp_changes.txt >> sigma_changes_archive.txt
+#    rm temp_changes.txt
 #///////////
 fi
 
@@ -64,6 +64,8 @@ if [[ "$2" != "--" ]]; then
     git remote update "$output_alias"               #Could do singular remote update
 
     if [[ "$(git rev-parse HEAD)" != "$(git rev-parse $output_alias/master)" ]]; then
-        ( git pull "$output_alias" master && git push "$output_alias" master ) || git diff "$output_alias"/master master | mail -s "Merge Conflict - Solution Required" <email>
+        ( git pull "$output_alias" master && git push "$output_alias" master ) #|| git diff "$output_alias"/master master | mail -s "Merge Conflict - Solution Required" <email>
     fi
+
+    git branch --unset-upstream
 fi
