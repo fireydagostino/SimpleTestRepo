@@ -16,7 +16,7 @@ import subprocess
     sync_prog.sh
 '''
 def run_sync():
-    subprocess.check_call(["bash", "-c", "/opt/sigma/git_sigma/sync_prog.sh"])
+    subprocess.check_call(["bash", "-c", "/opt/sigma/git_sigma/sync_prog_v2.1.sh"])
 
 
 
