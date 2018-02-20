@@ -39,6 +39,8 @@ fi
 cat temp_changes.txt >> sigma_changes_archive.txt
 rm temp_changes.txt
 
+git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
+
 # Please note that the script will not attempt to complete any Merge Conflicts
 #between the KIBANA server and the SOC-GitLab. Instead emails will be sent out
 #to the designated individuals with information regarding the merge conflicts.
