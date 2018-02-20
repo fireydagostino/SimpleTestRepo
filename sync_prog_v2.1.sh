@@ -54,3 +54,18 @@ else
 	echo "SOC-GitLab update is not required. Ending Script..."
 fi
 
+#cd /opt/sigma/elastic_rules
+
+#a_rule="rules/application/appframework_django_exceptions.yml"
+
+#printf "\nLocation: %s \nKIBANA Script: %s\n" "$a_rule" "$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)" >> kibana_rule_strings.txt
+
+#printf "%s\t%s\n"
+
+#python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml >> kibana_rule_strings.txt
+#git remote -v
+
+#for rules in "${target_files[@]}"; do
+#
+#done
+
