@@ -21,7 +21,7 @@ git remote update sigma
 repo_location=$(pwd)
 target_files=($(git diff --name-only sigma/master master | egrep "rules/"))
 
-echo "Preparing to update with the Neo-Sigma Repository..."
+printf "\nPreparing to update with the Neo-Sigma Repository...\n\n"
 git pull sigma master
 
 for target in "${target_files[@]}"; do
@@ -44,9 +44,9 @@ rm temp_changes.txt
 #to the designated individuals with information regarding the merge conflicts.
 #As a result, the individuals must resolve the conflicts and then manually
 #update the appropriate environment (ie push/pull).
-echo "Checking update requirements with SOC-GitLab..."
+printf "\n\nChecking update requirements with SOC-GitLab...\n"
 if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]]; then
-	echo "Update Acknowledged.\nPreparing to update with SOC-GitLab..."
+	printf "Update Acknowledged. Preparing to update with SOC-GitLab...\n\n"
 	( git pull origin master && git push origin master ) || git diff origin/master master | mail -s "Merge Conflict - Solution Required" anthony.dagostino@bell.ca
 else
 	echo "SOC-GitLab update is not required. Ending Script..."

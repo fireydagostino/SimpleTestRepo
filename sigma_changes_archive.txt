@@ -31,3 +31,78 @@ index 0000000..da18454
 +    - Runas command-line tool using /netonly parameter
 +level: high
 \ No newline at end of file
+commit b88a81a9e18d2cc26cee821b0ec429a22512027b
+Author: Florian Roth <florian.roth@bsk-consulting.de>
+Date:   Tue Feb 20 14:56:28 2018 +0100
+
+    Rule: Linux > named > suspicious activity
+
+diff --git a/rules/linux/lnx_susp_named.yml b/rules/linux/lnx_susp_named.yml
+new file mode 100644
+index 0000000..b4d995b
+--- /dev/null
++++ b/rules/linux/lnx_susp_named.yml
+@@ -0,0 +1,20 @@
++title: Suspicious Named Error
++status: experimental
++description: Detects suspicious DNS error messages that indicate a fatal or suspicious error that could be caused by exploiting attempts 
++references:
++    - https://github.com/ossec/ossec-hids/blob/master/etc/rules/named_rules.xml
++author: Florian Roth
++date: 2018/02/20
++logsource:
++    product: linux
++    service: syslog
++detection:
++    keywords:
++        - '* dropping source port zero packet from *'
++        - '* denied AXFR from *'
++        - '* exiting (due to fatal error)*'
++    condition: keywords
++falsepositives:
++    - Unknown
++level: high
++
+commit ef0cd4c11065733e7e1cbf462f48fd3875191356
+Author: Florian Roth <florian.roth@bsk-consulting.de>
+Date:   Tue Feb 20 13:43:42 2018 +0100
+
+    Rules: Extended and fixed (*) sshd rules
+
+diff --git a/rules/linux/lnx_susp_ssh.yml b/rules/linux/lnx_susp_ssh.yml
+index 731951d..ac226ca 100644
+--- a/rules/linux/lnx_susp_ssh.yml
++++ b/rules/linux/lnx_susp_ssh.yml
+@@ -2,6 +2,7 @@ title: Suspicious SSHD Error
+ description: Detects suspicious SSH / SSHD error messages that indicate a fatal or suspicious error that could be caused by exploiting attempts 
+ references:
+     - https://github.com/openssh/openssh-portable/blob/master/ssherr.c
++    - https://github.com/ossec/ossec-hids/blob/master/etc/rules/sshd_rules.xml
+ author: Florian Roth
+ date: 2017/06/30
+ logsource:
+@@ -9,13 +10,17 @@ logsource:
+     service: sshd
+ detection:
+     keywords:
+-        - 'unexpected internal error'
+-        - 'unknown or unsupported key type'
+-        - 'invalid certificate signing key'
+-        - 'invalid elliptic curve value'
+-        - 'incorrect signature'
+-        - 'error in libcrypto'
+-        - 'unexpected bytes remain after decoding'
++        - '*unexpected internal error*'
++        - '*unknown or unsupported key type*'
++        - '*invalid certificate signing key*'
++        - '*invalid elliptic curve value*'
++        - '*incorrect signature*'
++        - '*error in libcrypto*'
++        - '*unexpected bytes remain after decoding*'
++        - '*fatal: buffer_get_string: bad string*'
++        - '*Local: crc32 compensation attack*'
++        - '*bad client public DH value*'
++        - '*Corrupted MAC on input*'
+     condition: keywords
+ falsepositives:
+     - Unknown
