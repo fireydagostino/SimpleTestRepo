@@ -68,9 +68,9 @@ kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigm
 
 cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
 
-sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
-sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
-sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
+sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
+sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
+sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
 
 #printf "\nLocation: %s \nKIBANA Script: %s\n" "$a_rule" "$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)" >> kibana_rule_strings.txt
 
