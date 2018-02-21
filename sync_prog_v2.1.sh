@@ -10,6 +10,10 @@
 # All potential merge conflicts betweens the KIBANA server files and the files on
 #SOC-Gitlab are emailed to the respective individuals.
 
+timestamp(){
+	date
+}
+
 cd /opt/sigma/git_sigma
 
 touch temp_changes.txt
@@ -55,12 +59,12 @@ else
 fi
 
 cd /opt/sigma/elastic_rules/rule_templates
-echo "Now inside: $pwd"
+echo "Now inside: $(pwd)"
 
 #a_rule="rules/application/appframework_django_exceptions.yml"
 description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*")
 echo "Decription found: $description"
-name="$RANDOM"+"_"+timestamp+"_"
+name="$RANDOM****$(timestamp)****"
 echo "Name found: $name"
 kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
 echo "Kibana String found: $kibana_string"
@@ -79,8 +83,4 @@ sed -n "s/<kibana_string>/$kibana_string/" any_match_template.yaml
 #for rules in "${target_files[@]}"; do
 #
 #done
-
-timestamp(){
-	date
-}
 
