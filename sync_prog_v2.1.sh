@@ -5,11 +5,19 @@
 
 # Secondary script to perform Sigma updates between Neo23x0's Sigma files on GitHub and
 #the files located on the KIBANA server, which are then synchronized with the
-#SOC-GitLab files, if neccessary.
+#SOC-Sigma GitLab files, if neccessary.
 # All new rule commits are emailed to the respective individuals.
 # All potential merge conflicts betweens the KIBANA server files and the files on
-#SOC-Gitlab are emailed to the respective individuals.
-
+#SOC-Sigma Gitlab are emailed to the respective individuals.
+# Update: Will now convert sigma rules into their respective ElastAlert rules through
+#the any_match_template.yaml file. The newly converted files will then be uploaded
+#onto the SOC-Elastalert GitLab for further review by a Rule-Admin.
+# Note: There are two separately initialized git repository that are used by this
+#script. The first is in /opt/sigma/git_sigma which deals with the Sigma rule
+#retrieval portion as well as the SOC-Sigma Gitlab upload. The second is in
+#/opt/sigma/elastic_rules and deals with updating the SOC-Elastalert GitLab of
+#any newly generated rules. These newly generated rules will  be placed inside
+#of the autobot-rules branch.
 
 cd /opt/sigma/git_sigma
 
@@ -42,7 +50,7 @@ cat temp_changes.txt >> sigma_changes_archive.txt
 git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 
 # Please note that the script will not attempt to complete any Merge Conflicts
-#between the KIBANA server and the SOC-GitLab. Instead emails will be sent out
+#between the KIBANA server and the SOC-Sigma GitLab. Instead emails will be sent out
 #to the designated individuals with information regarding the merge conflicts.
 #As a result, the individuals must resolve the conflicts and then manually
 #update the appropriate environment (ie push/pull).
@@ -54,34 +62,35 @@ else
 	echo "SOC-GitLab update is not required. Ending Script..."
 fi
 
+
+
+
 cd /opt/sigma/elastic_rules
 
-#a_rule="rules/application/appframework_django_exceptions.yml"
-description="$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )"
-name="$RANDOM""_auto_generated_rule_""$RANDOM"
-kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
+#description="$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )"
+#name="$RANDOM""_auto_generated_rule_""$RANDOM"
+#kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
+#cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
+#sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
+#sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
+#sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
 
-cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
+if [ -s temp_changes.txt ]; then
+	for rule in "${target_files[@]}"; do
+		description="$(cat /opt/sigma/git_sigma/$rule | egrep "description.*" | cut -d " " -f 2- )"
+		name="$RANDOM""_auto_generated_rule_""$RANDOM"
+		kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/$rule)"
 
-sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
-sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
-sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
+		cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
 
-#python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml >> kibana_rule_strings.txt
+		sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
+		sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
+		sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
+	done
+fi
 
-#if [ -s temp_changes.txt ]; then
-#	for rule in "${target_files[@]}"; do
-#		description="$(cat /opt/sigma/git_sigma/$rule | egrep "description.*" | cut -d " " -f 2- )"
-#		name="$RANDOM""_auto_generated_rule_""$RANDOM"
-#		kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/$rule)"
-#		cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
-#		sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
-#		sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
-#		sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
-#	done
-#fi
+( git pull elastic/autobot-rules autobot-rules && git push elastic autobot-rules ) || echo "SOC-Elastalert GitLab sync failure."
 
 cd /opt/sigma/git_sigma
 rm temp_changes.txt
-
 
