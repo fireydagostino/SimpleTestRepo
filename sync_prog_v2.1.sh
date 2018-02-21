@@ -62,15 +62,15 @@ cd /opt/sigma/elastic_rules/rule_templates
 echo "Now inside: $(pwd)"
 
 #a_rule="rules/application/appframework_django_exceptions.yml"
-description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*")
-echo "Decription found: $description"
-name="$RANDOM****$(timestamp)****"
-echo "Name found: $name"
+description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )
+#echo "Decription found: $description"
+name="$RANDOM****$(timestamp)****$RANDOM"
+#echo "Name found: $name"
 kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
-echo "Kibana String found: $kibana_string"
+#echo "Kibana String found: $kibana_string"
 
 sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
-sed -i "s/<description/$description/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
+sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
 sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
 
 #printf "\nLocation: %s \nKIBANA Script: %s\n" "$a_rule" "$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)" >> kibana_rule_strings.txt
