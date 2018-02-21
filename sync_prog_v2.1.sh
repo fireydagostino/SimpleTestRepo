@@ -38,7 +38,6 @@ if [ -s temp_changes.txt ]; then
 fi
 
 cat temp_changes.txt >> sigma_changes_archive.txt
-rm temp_changes.txt
 
 git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 
@@ -47,7 +46,7 @@ git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 #to the designated individuals with information regarding the merge conflicts.
 #As a result, the individuals must resolve the conflicts and then manually
 #update the appropriate environment (ie push/pull).
-printf "\n\nChecking update requirements with SOC-GitLab...\n"
+printf "\nChecking update requirements with SOC-GitLab...\n"
 if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]]; then
 	printf "Update Acknowledged. Preparing to update with SOC-GitLab...\n\n"
 	( git pull origin master && git push origin master ) || git diff origin/master master | mail -s "Merge Conflict - Solution Required" anthony.dagostino@bell.ca
@@ -56,15 +55,11 @@ else
 fi
 
 cd /opt/sigma/elastic_rules
-#echo "Now inside: $(pwd)"
 
 #a_rule="rules/application/appframework_django_exceptions.yml"
-description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )
-#echo "Decription found: $description"
+description="$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )"
 name="$RANDOM""_auto_generated_rule_""$RANDOM"
-#echo "Name found: $name"
 kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
-#echo "Kibana String found: $kibana_string"
 
 cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
 
@@ -72,14 +67,21 @@ sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
 sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
 sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
 
-#printf "\nLocation: %s \nKIBANA Script: %s\n" "$a_rule" "$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)" >> kibana_rule_strings.txt
-
-#printf "%s\t%s\n"
-
 #python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml >> kibana_rule_strings.txt
-git remote -v
 
-#for rules in "${target_files[@]}"; do
-#
-#done
+#if [ -s temp_changes.txt ]; then
+#	for rule in "${target_files[@]}"; do
+#		description="$(cat /opt/sigma/git_sigma/$rule | egrep "description.*" | cut -d " " -f 2- )"
+#		name="$RANDOM""_auto_generated_rule_""$RANDOM"
+#		kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/$rule)"
+#		cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
+#		sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
+#		sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
+#		sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
+#	done
+#fi
+
+cd /opt/sigma/git_sigma
+rm temp_changes.txt
+
 
