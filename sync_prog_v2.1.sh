@@ -55,11 +55,15 @@ else
 fi
 
 cd /opt/sigma/elastic_rules/rule_templates
+echo "Now inside: $pwd"
 
 #a_rule="rules/application/appframework_django_exceptions.yml"
 description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*")
+echo "Decription found: $description"
 name="$RANDOM"+"_"+timestamp+"_"
+echo "Name found: $name"
 kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
+echo "Kibana String found: $kibana_string"
 
 sed -n "s/<name>/$name/" any_match_template.yaml
 sed -n "s/<description/$description/" any_match_template.yaml
