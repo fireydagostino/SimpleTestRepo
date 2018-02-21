@@ -66,6 +66,8 @@ fi
 
 
 cd /opt/sigma/elastic_rules
+
+printf "\nUpdating Remote Repository for SOC-Elastalert GitLab...\n"
 git remote update elastic
 
 #description="$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )"
@@ -77,6 +79,7 @@ git remote update elastic
 #sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
 
 if [ -s temp_changes.txt ]; then
+	printf "\nPreparing to update newly changed rules to the Elastalert format...\n"
 	for rule in "${target_files[@]}"; do
 		description="$(cat /opt/sigma/git_sigma/$rule | egrep "description.*" | cut -d " " -f 2- )"
 		name="$RANDOM""_auto_generated_rule_""$RANDOM"
@@ -88,8 +91,10 @@ if [ -s temp_changes.txt ]; then
 		sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
 		sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
 	done
+	printf "\nUpdates complete. Please find auto-generated files in /opt/sigma/elastic_rules.\n"
 fi
 
+printf "\nUpdating between SOC-Elastalert Gitlab and KIBANA Server...\n"
 ( git pull elastic autobot-rules && git push elastic autobot-rules ) || echo "SOC-Elastalert GitLab sync failure."
 
 cd /opt/sigma/git_sigma
