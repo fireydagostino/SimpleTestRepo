@@ -59,7 +59,7 @@ if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]]; then
 	printf "Update Acknowledged. Preparing to update with SOC-GitLab...\n\n"
 	( git pull origin master && git push origin master ) || git diff origin/master master | mail -s "Merge Conflict - Solution Required" anthony.dagostino@bell.ca
 else
-	echo "SOC-GitLab update is not required. Ending Script..."
+	echo "SOC-GitLab update is not required."
 fi
 
 
@@ -94,7 +94,7 @@ if [ -s temp_changes.txt ]; then
 	printf "\nUpdates complete. Please find auto-generated files in /opt/sigma/elastic_rules.\n"
 fi
 
-printf "\nUpdating between SOC-Elastalert Gitlab and KIBANA Server...\n"
+printf "\nUpdating between SOC-Elastalert Gitlab and KIBANA Server...\n\n"
 ( git pull elastic autobot-rules && git push elastic autobot-rules ) || echo "SOC-Elastalert GitLab sync failure."
 
 cd /opt/sigma/git_sigma
