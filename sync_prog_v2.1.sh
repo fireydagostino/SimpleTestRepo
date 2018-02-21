@@ -10,9 +10,6 @@
 # All potential merge conflicts betweens the KIBANA server files and the files on
 #SOC-Gitlab are emailed to the respective individuals.
 
-timestamp(){
-	date
-}
 
 cd /opt/sigma/git_sigma
 
@@ -58,16 +55,18 @@ else
 	echo "SOC-GitLab update is not required. Ending Script..."
 fi
 
-cd /opt/sigma/elastic_rules/rule_templates
-echo "Now inside: $(pwd)"
+cd /opt/sigma/elastic_rules
+#echo "Now inside: $(pwd)"
 
 #a_rule="rules/application/appframework_django_exceptions.yml"
 description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )
 #echo "Decription found: $description"
-name="$RANDOM****$(timestamp)****$RANDOM"
+name="$RANDOM""_auto_generated_rule_""$RANDOM"
 #echo "Name found: $name"
 kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
 #echo "Kibana String found: $kibana_string"
+
+cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
 
 sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
 sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml
@@ -78,7 +77,7 @@ sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/rule_templat
 #printf "%s\t%s\n"
 
 #python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml >> kibana_rule_strings.txt
-#git remote -v
+git remote -v
 
 #for rules in "${target_files[@]}"; do
 #
