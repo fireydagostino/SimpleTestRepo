@@ -66,6 +66,7 @@ fi
 
 
 cd /opt/sigma/elastic_rules
+git remote update elastic
 
 #description="$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )"
 #name="$RANDOM""_auto_generated_rule_""$RANDOM"
@@ -89,7 +90,7 @@ if [ -s temp_changes.txt ]; then
 	done
 fi
 
-( git pull elastic/autobot-rules autobot-rules && git push elastic autobot-rules ) || echo "SOC-Elastalert GitLab sync failure."
+( git pull elastic autobot-rules && git push elastic autobot-rules ) || echo "SOC-Elastalert GitLab sync failure."
 
 cd /opt/sigma/git_sigma
 rm temp_changes.txt
