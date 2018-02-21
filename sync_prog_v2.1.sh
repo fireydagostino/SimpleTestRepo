@@ -54,16 +54,16 @@ else
 	echo "SOC-GitLab update is not required. Ending Script..."
 fi
 
-#cd /opt/sigma/elastic_rules/rule_templates
+cd /opt/sigma/elastic_rules/rule_templates
 
 #a_rule="rules/application/appframework_django_exceptions.yml"
-#description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*")
-#name="$RANDOM"+"_"+timestamp+"_"
-#kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
+description=$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*")
+name="$RANDOM"+"_"+timestamp+"_"
+kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)"
 
-#sed -n "s/<name>/$name/" any_match_template.yaml
-#sed -n "s/<description/$description/" any_match_template.yaml
-#sed -n "s/<kibana_string>/$kibana_string/" any_match_template.yaml
+sed -n "s/<name>/$name/" any_match_template.yaml
+sed -n "s/<description/$description/" any_match_template.yaml
+sed -n "s/<kibana_string>/$kibana_string/" any_match_template.yaml
 
 #printf "\nLocation: %s \nKIBANA Script: %s\n" "$a_rule" "$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml)" >> kibana_rule_strings.txt
 
