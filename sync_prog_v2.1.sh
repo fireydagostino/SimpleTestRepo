@@ -33,7 +33,7 @@ renamed_files=($(git diff --name-status --diff-filter=R master sigma/master | eg
 changed_and_renamed_files=($(git diff --name-status --diff-filter=R master sigma/master | egrep "rules/" | egrep -v "R100" | cut -d $'\t' -f 3))
 
 printf "\nPreparing to update with the Neo-Sigma Repository...\n\n"
-git pull -X theirs  sigma master
+git pull sigma master
 
 if [[ "${target_files[0]}" != "" ]]; then
 	printf "# # # # FILES CHANGED (NO RENAMES) # # # #\n" >> temp_changes.txt
