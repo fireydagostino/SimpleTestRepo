@@ -106,3 +106,65 @@ index 731951d..ac226ca 100644
      condition: keywords
  falsepositives:
      - Unknown
+commit 9020a9aa32fb64066db7506450c6e823790d3476
+Author: Florian Roth <florian.roth@bsk-consulting.de>
+Date:   Thu Feb 22 13:29:19 2018 +0100
+
+    Fixed file names "vuln" > "exploit"
+
+diff --git a/rules/windows/sysmon/sysmon_exploit_cve_2017_0261.yml b/rules/windows/sysmon/sysmon_exploit_cve_2017_0261.yml
+new file mode 100644
+index 0000000..72e8b85
+--- /dev/null
++++ b/rules/windows/sysmon/sysmon_exploit_cve_2017_0261.yml
+@@ -0,0 +1,19 @@
++title: Exploit for CVE-2017-0261
++status: experimental
++description: Detects Winword starting uncommon sub process FLTLDR.exe as used in exploits for CVE-2017-0261 and CVE-2017-0262 
++references:
++  - https://www.fireeye.com/blog/threat-research/2017/05/eps-processing-zero-days.html
++author: Florian Roth
++date: 2018/02/22
++logsource:
++    product: windows
++    service: sysmon
++detection:
++    selection:
++        EventID: 1
++        ParentImage: '*\WINWORD.EXE'
++        Image: '*\FLTLDR.exe*'
++    condition: selection
++falsepositives:
++    - Unknown
++level: critical
+commit 9020a9aa32fb64066db7506450c6e823790d3476
+Author: Florian Roth <florian.roth@bsk-consulting.de>
+Date:   Thu Feb 22 13:29:19 2018 +0100
+
+    Fixed file names "vuln" > "exploit"
+
+diff --git a/rules/windows/sysmon/sysmon_exploit_cve_2017_8759.yml b/rules/windows/sysmon/sysmon_exploit_cve_2017_8759.yml
+new file mode 100644
+index 0000000..7267b3d
+--- /dev/null
++++ b/rules/windows/sysmon/sysmon_exploit_cve_2017_8759.yml
+@@ -0,0 +1,19 @@
++title: Exploit for CVE-2017-8759 
++description: Detects Winword starting uncommon sub process csc.exe as used in exploits for CVE-2017-8759
++references:
++  - https://www.hybrid-analysis.com/sample/0b4ef455e385b750d9f90749f1467eaf00e46e8d6c2885c260e1b78211a51684?environmentId=100
++  - https://www.reverse.it/sample/0b4ef455e385b750d9f90749f1467eaf00e46e8d6c2885c260e1b78211a51684?environmentId=100
++author: Florian Roth
++date: 15.09.2017
++logsource:
++    product: windows
++    service: sysmon
++detection:
++    selection:
++        EventID: 1
++        ParentImage: '*\WINWORD.EXE'
++        Image: '*\csc.exe'
++    condition: selection
++falsepositives:
++    - Unknown
++level: critical
