@@ -28,24 +28,41 @@ git branch -u sigma/master
 git remote update sigma
 
 repo_location=$(pwd)
-target_files=($(git diff --name-only sigma/master master | egrep "rules/"))
+target_files=($(git diff --name-status --diff-filter=r master sigma/master | egrep "rules/" | cut -d $'\t' -f 2))
+renamed_files=($(git diff --name-status --diff-filter=R master sigma/master | egrep "rules/" | egrep "R100" | cut -d $'\t' -f 3))
+changed_and_renamed_files=($(git diff --name-status --diff-filter=R master sigma/master | egrep "rules/" | egrep -v "R100" | cut -d $'\t' -f 3))
 
 printf "\nPreparing to update with the Neo-Sigma Repository...\n\n"
-git pull sigma master
+git pull -X theirs  sigma master
 
+if [[ "${target_files[0]}" != "" ]]; then
+	printf "# # # # FILES CHANGED (NO RENAMES) # # # #\n" >> temp_changes.txt
+fi
 for target in "${target_files[@]}"; do
+	git log -p -1 "$repo_location/$target" >> temp_changes.txt
+done
+
+if [[ "${changed_and_renamed_files[0]}" != "" ]]; then
+	printf "\n# # # # FILES CHANGED AND RENAMED # # # #\n" >> temp_changes.txt
+fi
+for target in "${changed_and_renamed_files[@]}"; do
+	git log -p -1 "$repo_location/$target" >> temp_changes.txt
+done
+
+if [[ "${renamed_files[0]}" != "" ]]; then
+	printf "\n# # # # FILES RENAMED (NO OTHER CHANGES) # # # #\n" >> temp_changes.txt
+fi
+for target in "${renamed_files[@]}"; do
 	git log -p -1 "$repo_location/$target" >> temp_changes.txt
 done
 
 git branch --unset-upstream
 
 if [ -s temp_changes.txt ]; then
-	mail -s "Sigma Rules Update" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/temp_changes.txt
-	mail -s "Sigma Rules Update" jonathan.mallette@bell.ca < /opt/sigma/git_sigma/temp_changes.txt
-	echo "Emails sent to listed individuals."
+	( mail -s "Sigma Rules Update" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/temp_changes.txt && mail -s "Sigma Rules Update" jonathan.mallette@bell.ca < /opt/sigma/git_sigma/temp_changes.txt && echo "Emails sent to listed individuals." ) || echo "Error in sending emails."
+	printf "\n\n*=*=*=*=* DATE UPDATED: $(date) *=*=*=*=*\n\n" >> sigma_changes_archive.txt
+	cat temp_changes.txt >> sigma_changes_archive.txt
 fi
-
-cat temp_changes.txt >> sigma_changes_archive.txt
 
 git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 
@@ -57,7 +74,7 @@ git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 printf "\nChecking update requirements with SOC-GitLab...\n"
 if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]]; then
 	printf "Update Acknowledged. Preparing to update with SOC-GitLab...\n\n"
-	( git pull origin master && git push origin master ) || git diff origin/master master | mail -s "Merge Conflict - Solution Required" anthony.dagostino@bell.ca
+	( git pull origin master && git push origin master ) || ( git diff master origin/master | mail -s "Merge Conflict - Solution Required" anthony.dagostino@bell.ca )
 else
 	echo "SOC-GitLab update is not required."
 fi
@@ -95,7 +112,7 @@ if [ -s temp_changes.txt ]; then
 fi
 
 printf "\nUpdating between SOC-Elastalert Gitlab and KIBANA Server...\n\n"
-( git pull elastic autobot-rules && git push elastic autobot-rules ) || echo "SOC-Elastalert GitLab sync failure."
+( git pull elastic autobot-rules && git push elastic autobot-rules && echo "Update Success.") || echo "SOC-Elastalert GitLab sync failure."
 
 cd /opt/sigma/git_sigma
 rm temp_changes.txt
