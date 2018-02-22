@@ -34,7 +34,13 @@ changed_and_renamed_files=($(git diff --name-status --diff-filter=R master sigma
 
 printf "\nPreparing to update with the Neo-Sigma Repository...\n\n"
 git pull sigma master
-
+#BEGIN DEBUG CHECK
+echo "*#*#*#*#* BEGIN RULE DEBUG CHECK *#*#*#*#*"
+echo "${target_files[@]}"
+echo "${renamed_files[@]}"
+echo "${changed_and_renamed_files[@]}"
+echo "*#*#*#*#* END RULE DEBUG CHECK *#*#*#*#*"
+#END DEBUG CHECK
 if [[ "${target_files[0]}" != "" ]]; then
 	printf "# # # # FILES CHANGED (NO RENAMES) # # # #\n" >> temp_changes.txt
 fi
