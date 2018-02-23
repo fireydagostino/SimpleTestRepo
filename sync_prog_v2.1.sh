@@ -19,21 +19,31 @@
 #any newly generated rules. These newly generated rules will  be placed inside
 #of the autobot-rules branch.
 
-cd /opt/sigma/git_sigma
+#cd /opt/sigma/git_sigma
 
 touch temp_changes.txt
 
-git init
-git branch -u sigma/master
-git remote update sigma
+#git init
+#git branch -u sigma/master
+#git remote update sigma
+git remote update test #DEBUGGING
 
 repo_location=$(pwd)
-target_files=($(git diff --name-status --diff-filter=r master sigma/master | egrep "rules/" | cut -d $'\t' -f 2))
-renamed_files=($(git diff --name-status --diff-filter=R master sigma/master | egrep "rules/" | egrep "R100" | cut -d $'\t' -f 3))
-changed_and_renamed_files=($(git diff --name-status --diff-filter=R master sigma/master | egrep "rules/" | egrep -v "R100" | cut -d $'\t' -f 3))
+target_files=($(git diff --find-renames --name-status --diff-filter=AM testing test/testing | egrep "rules/" | cut -d $'\t' -f 2))
+renamed_files=($(git diff --find-renames --name-status --diff-filter=R testing test/testing | egrep "rules/" | egrep "R100" | cut -d $'\t' -f 3))
+changed_and_renamed_files=($(git diff --find-renames --name-status --diff-filter=R testing test/testing | egrep "rules/" | egrep -v "R100" | cut -d $'\t' -f 3))
+#DEBUGGING - CHANGE THE TESTING TO MASTER AND TEST/TESTING BACK TO SIGMA/MASTER
+#BELOW IS ADDED FOR TESTING
+deleted_files=($(git diff --find-renames --name-only --diff-filter=D testing test/testing | egrep "rules/"))
+echo "FINDING DELETED IN REPO..."
+echo "${deleted_files[@]}"
+#git diff --find-renames --name-only testing test/testing | egrep "rules"
+###########
 
 printf "\nPreparing to update with the Neo-Sigma Repository...\n\n"
-git pull sigma master
+#git pull sigma master
+git pull test testing #DEBUGGING
+
 #BEGIN DEBUG CHECK
 echo "*#*#*#*#* BEGIN RULE DEBUG CHECK *#*#*#*#*"
 echo "${target_files[@]}"
@@ -62,15 +72,17 @@ for target in "${renamed_files[@]}"; do
 	git log -p -1 "$repo_location/$target" >> temp_changes.txt
 done
 
-git branch --unset-upstream
+#git branch --unset-upstream
+printf "\n\n#=#=#=#=#=# SHOWING THE TEMP FILE #=#=#=#=#=#\n\n"
+cat temp_changes.txt #DEBUGGING
 
-if [ -s temp_changes.txt ]; then
-	( mail -s "Sigma Rules Update" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/temp_changes.txt && mail -s "Sigma Rules Update" jonathan.mallette@bell.ca < /opt/sigma/git_sigma/temp_changes.txt && echo "Emails sent to listed individuals." ) || echo "Error in sending emails."
-	printf "\n\n*=*=*=*=* DATE UPDATED: $(date) *=*=*=*=*\n\n" >> sigma_changes_archive.txt
-	cat temp_changes.txt >> sigma_changes_archive.txt
-fi
+#if [ -s temp_changes.txt ]; then
+	#( mail -s "Sigma Rules Update" anthony.dagostino@bell.ca < /opt/sigma/git_sigma/temp_changes.txt && mail -s "Sigma Rules Update" jonathan.mallette@bell.ca < /opt/sigma/git_sigma/temp_changes.txt && echo "Emails sent to listed individuals." ) || echo "Error in sending emails."
+	#printf "\n\n*=*=*=*=* DATE UPDATED: $(date) *=*=*=*=*\n\n" >> sigma_changes_archive.txt
+	#cat temp_changes.txt >> sigma_changes_archive.txt
+#fi
+#git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 
-git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 
 # Please note that the script will not attempt to complete any Merge Conflicts
 #between the KIBANA server and the SOC-Sigma GitLab. Instead emails will be sent out
@@ -78,20 +90,20 @@ git commit sigma_changes_archive.txt -m "Sigma Rule Changes Archive updated."
 #As a result, the individuals must resolve the conflicts and then manually
 #update the appropriate environment (ie push/pull).
 printf "\nChecking update requirements with SOC-GitLab...\n"
-if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]]; then
-	printf "Update Acknowledged. Preparing to update with SOC-GitLab...\n\n"
-	( git pull origin master && git push origin master ) || ( git diff master origin/master | mail -s "Merge Conflict - Solution Required" anthony.dagostino@bell.ca )
-else
-	echo "SOC-GitLab update is not required."
-fi
+#if [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]]; then
+#	printf "Update Acknowledged. Preparing to update with SOC-GitLab...\n\n"
+#	( git pull origin master && git push origin master ) || ( git diff master origin/master | mail -s "Merge Conflict - Solution Required" anthony.dagostino@bell.ca )
+#else
+#	echo "SOC-GitLab update is not required."
+#fi
 
 
 
 
-cd /opt/sigma/elastic_rules
-
+#cd /opt/sigma/elastic_rules
 printf "\nUpdating Remote Repository for SOC-Elastalert GitLab...\n"
-git remote update elastic
+#git remote update elastic
+
 
 #description="$(cat /opt/sigma/git_sigma/rules/application/appframework_django_exceptions.yml | egrep "description.*" | cut -d " " -f 2- )"
 #name="$RANDOM""_auto_generated_rule_""$RANDOM"
@@ -101,25 +113,26 @@ git remote update elastic
 #sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
 #sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
 
-if [ -s temp_changes.txt ]; then
-	printf "\nPreparing to update newly changed rules to the Elastalert format...\n"
-	for rule in "${target_files[@]}"; do
-		description="$(cat /opt/sigma/git_sigma/$rule | egrep "description.*" | cut -d " " -f 2- )"
-		name="$RANDOM""_auto_generated_rule_""$RANDOM"
-		kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/$rule)"
 
-		cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
+#if [ -s temp_changes.txt ]; then
+#	printf "\nPreparing to update newly changed rules to the Elastalert format...\n"
+#	for rule in "${target_files[@]}"; do
+#		description="$(cat /opt/sigma/git_sigma/$rule | egrep "description.*" | cut -d " " -f 2- )"
+#		name="$RANDOM""_auto_generated_rule_""$RANDOM"
+#		kibana_string="$(python3.4 /opt/sigma/git_sigma/tools/sigmac /opt/sigma/git_sigma/$rule)"
 
-		sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
-		sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
-		sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
-	done
-	printf "\nUpdates complete. Please find auto-generated files in /opt/sigma/elastic_rules.\n"
-fi
+#		cp /opt/sigma/elastic_rules/rule_templates/any_match_template.yaml "$name"
+#
+#		sed -i "s/<name>/$name/" /opt/sigma/elastic_rules/"$name"
+#		sed -i "s/<description>/$description/" /opt/sigma/elastic_rules/"$name"
+#		sed -i "s/<kibana_string>/$kibana_string/" /opt/sigma/elastic_rules/"$name"
+#	done
+#	printf "\nUpdates complete. Please find auto-generated files in /opt/sigma/elastic_rules.\n"
+#fi
 
-printf "\nUpdating between SOC-Elastalert Gitlab and KIBANA Server...\n\n"
-( git pull elastic autobot-rules && git push elastic autobot-rules && echo "Update Success.") || echo "SOC-Elastalert GitLab sync failure."
+#printf "\nUpdating between SOC-Elastalert Gitlab and KIBANA Server...\n\n"
+#( git pull elastic autobot-rules && git push elastic autobot-rules && echo "Update Success.") || echo "SOC-Elastalert GitLab sync failure."
 
-cd /opt/sigma/git_sigma
+#cd /opt/sigma/git_sigma
 rm temp_changes.txt
 
