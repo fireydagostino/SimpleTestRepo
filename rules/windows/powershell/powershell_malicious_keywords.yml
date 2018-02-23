@@ -37,7 +37,7 @@ detection:
         - Metasploit
         - Mimikatz
     condition: keywords
-####SOME MORE RANDOM CHECKING####
+####NEW MORE RANDOM CHECKING####
 falsepositives:
     - Penetration tests
 level: high
