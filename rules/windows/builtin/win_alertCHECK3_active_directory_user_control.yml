@@ -15,5 +15,5 @@ detection:
     condition: selection and keywords
 falsepositives: 
     - Unknown
-    #RAN TESTING#
+    #SOME RAN TESTING#
 level: high
